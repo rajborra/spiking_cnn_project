@@ -9,7 +9,7 @@ tau_RC = 10*ms
 
 ## Equations
 eqs = '''
-dv/dt = (-v + J)/tau_RC:  1
+dv/dt = (-(v+60) + J)/tau_RC:  1
 J : 1
 '''
 
@@ -24,21 +24,20 @@ monitor_J = StateMonitor(neurons,'J',record=True)
 layer1 = [0,1]
 layer2 = [2,3,4,5]
 layer3 = [6]
-syns = []; i = 0;
-w = [random.random()-0.5 for _ in range(12)]
-print w
-for pre_syn in layer1:
-    for post_syn in layer2:
-        syn = Synapses(neurons, neurons, clock = Clock(defaultclock.dt), model = 'weight:1', on_pre = 'J += weight')
-        syn.connect(i=[pre_syn],j=[post_syn])
-        syn.weight = w[i]
-        syns.append(syn)
-        i += 1
+w = [random.random()-0.5 for _ in range(8)]
+
+syns = Synapses(neurons, neurons, clock = Clock(defaultclock.dt), model = 'weight:1', on_pre = 'J += weight')
+syns.connect(i=[0,0,0,0,1,1,1,1],j=[2,3,4,5,2,3,4,5])
+syns.weight = w
 
 ## Simulation
 neurons.J[0] = 0
 run(5*ms)
-neurons.J[0] = 5
+neurons.J[0] = 50
+run(25*ms)
+neurons.J[0] = 50
+w[3] = -1*w[3]
+syns.weight = w
 run(50*ms)
 
 ## Plotting
