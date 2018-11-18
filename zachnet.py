@@ -9,7 +9,7 @@ tau_RC = 10*ms
 
 ## Equations
 eqs = '''
-dv/dt = (-0.5*(v+60) + J-5)/tau_RC:  1
+dv/dt = (-0.5*(v+60) + J)/tau_RC:  1
 J : 1
 '''
 
@@ -116,13 +116,13 @@ for par in [[0,1,1],[1,0,1],[0,0,0],[1,1,1]]:
     expected = par[2]
     neurons.J[0] = 0
     neurons.J[1] = 0
-    run(5*ms)
+    run(25*ms)
     neurons.J[0] = 50*input[0]
     neurons.J[1] = 50*input[1]
     run(25*ms)
     neurons.J[0] = 0
     neurons.J[1]= 0
-    run(5*ms)
+    run(25*ms)
     ncount = [v1-v2 for v1,v2 in zip(k.count,prevcount)]
     if max(ncount)==0:
         temp = 1
