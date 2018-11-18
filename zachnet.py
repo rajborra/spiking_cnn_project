@@ -70,19 +70,21 @@ syns2.weight = w2
 #print w2
 #print k.count
 prevcount = [0]*7
-for rand in range(30):
-    for par in [[0,1,1],[1,0,1],[0,0,0],[1,1,0]]:
+epocherr = []
+for rand in range(5):
+    temperr = 0
+    for par in [[1,1,1],[1,0,1],[0,0,0],[0,1,1]]:
         input = par[0:2]
         expected = par[2]
         neurons.J[0] = 0
         neurons.J[1] = 0
-        run(5*ms)
+        run(10*ms)
         neurons.J[0] = 50*input[0]
         neurons.J[1] = 50*input[1]
         run(25*ms)
         neurons.J[0] = 0
         neurons.J[1]= 0
-        run(5*ms)
+        run(10*ms)
         ncount = [v1-v2+1 for v1,v2 in zip(k.count,prevcount)]
         prevcount = k.count[:]
         if max(ncount)==0:
@@ -91,13 +93,15 @@ for rand in range(30):
             temp = 0
         spikes = [float(val)/(float(max(ncount))+temp) for val in ncount]
         error = expected - spikes[6]
+        temperr = temperr + error*error
         grad5 = error
         grads = [val*error for val in w2]
         w2 = [v1+ v2 for v1, v2 in zip(w2,[val*grad5*alpha for val in spikes[2:6]])]
-        w1[0:4] = [v1 + v2 for v1,v2 in zip( w1[0:4],  [val*input[0]*alpha for val in grads])]
-        w1[4:8] = [v1 + v2 for v1,v2 in zip( w1[4:8],  [val*input[1]*alpha for val in grads])]
+        w1[0:4] = [v1 + v2 for v1,v2 in zip( w1[0:4],  [val*spikes[0]*alpha for val in grads])]
+        w1[4:8] = [v1 + v2 for v1,v2 in zip( w1[4:8],  [val*spikes[1]*alpha for val in grads])]
         syns.weight = w1
         syns2.weight = w2
+    epocherr.append(temperr)
     #print w1
     #print w2
 
@@ -130,7 +134,8 @@ for par in [[0,1,1],[1,0,1],[0,0,0],[1,1,0]]:
     #w1[4:8] = [v1 + v2 for v1,v2 in zip( w1[4:8],  [val*input[1]*alpha for val in grads])]
     #syns.weight = w1
     #syns2.weight = w2
-
+print("OOGABOOGABOOGA")
+print epocherr
 
 
 ## Plotting
