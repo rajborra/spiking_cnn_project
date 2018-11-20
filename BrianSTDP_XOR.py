@@ -86,7 +86,7 @@ for e in range (2):
         #(0,1) -> 1 (GOOD)
         #(1,1) -> 0 (BAD)
         input_A.rates = set[0]*40*Hz
-        input_B.rates = set[1]*0*Hz
+        input_B.rates = set[1]*40*Hz
         o = (-1)**(set[2]+1)
         run(500*ms)
 
