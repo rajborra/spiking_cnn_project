@@ -81,10 +81,10 @@ data_set = [[0, 0, 0],       # [0,1] are inputs, [2] is expected output
             [1, 1, 0]]
 for e in range (2):
     for set in data_set:
-        #(0,0) -> 0
-        #(1,0) -> 1
-        #(0,1) -> 1
-        #(1,1) -> 0
+        #(0,0) -> 0 (BAD)
+        #(1,0) -> 1 (GOOD)
+        #(0,1) -> 1 (GOOD)
+        #(1,1) -> 0 (BAD)
         input_A.rates = set[0]*40*Hz
         input_B.rates = set[1]*0*Hz
         o = (-1)**(set[2]+1)
