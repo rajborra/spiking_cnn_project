@@ -3,7 +3,6 @@ import numpy as np
 import random
 
 defaultclock.dt = 100*ms
-N = 10
 taum = 10*ms
 taupre = 20*ms
 taupost = taupre
@@ -20,9 +19,10 @@ dApost *= gmax
 dApre *= gmax
 
 eqs_neurons = '''
-dv/dt = (-(v+60)+ge*(Ee-vr)) / taum : 1
+dv/dt = (-(v+60)+ge*(Ee-vr)+J) / taum : 1
 dge/dt = -ge / taue : 1
 
+J:1
 '''
 
 input = PoissonGroup(60, rates=F,clock = Clock(defaultclock.dt))
@@ -65,37 +65,30 @@ S2.w = 'rand() * gmax'
 def monitor(): 
     global o
     if o == -1:
-        S.w *= 0.95
-        S2.w *= 0.95
+        S.w += 0.0001
+        S2.w += 0.0001
     if o == 1:
-        S.w *= 1.05
-        S2.w *= 1.05
+        S.w += 0.001
+        S2.w += 0.001
 
 mon = StateMonitor(S, 'w', record=True)
 mon2 = StateMonitor(S2, 'w', record=True)
 
 # run epochs
-for e in range (10):
-    #(0,0) -> 0
-    input_A.rates = 0*Hz
-    input_B.rates = 0*Hz
-    o = -1
-    run(500*ms) 
-    #(1,0) -> 1
-    input_A.rates = 40*Hz
-    input_B.rates = 0*Hz
-    o = 1
-    run(500*ms)
-    #(0,1) -> 1
-    input_A.rates = 0*Hz
-    input_B.rates = 40*Hz
-    o = 1
-    run(500*ms) 
-    #(1,1) -> 0
-    input_A.rates = 40*Hz
-    input_B.rates = 40*Hz
-    o = -1
-    run(500*ms)
+data_set = [[0, 0, 0],       # [0,1] are inputs, [2] is expected output
+            [0, 1, 1],
+            [1, 0, 1],
+            [1, 1, 0]]
+for e in range (2):
+    for set in data_set:
+        #(0,0) -> 0
+        #(1,0) -> 1
+        #(0,1) -> 1
+        #(1,1) -> 0
+        input_A.rates = set[0]*40*Hz
+        input_B.rates = set[1]*0*Hz
+        o = (-1)**(set[2]+1)
+        run(500*ms)
 
 subplot(211)
 plot(mon.t/second, mon.w.T/gmax)
