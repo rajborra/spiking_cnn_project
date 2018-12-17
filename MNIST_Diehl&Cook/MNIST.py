@@ -17,7 +17,7 @@ import brian2 as b2
 from brian2tools import *
 
 # specify the location of the MNIST data
-MNIST_data_path = '/Users/Kim/Desktop/Data/' 
+MNIST_data_path = '/Users/Kim/Desktop/MNIST_Diehl&Cook/' 
 #------------------------------------------------------------------------------
 # functions
 #------------------------------------------------------------------------------
@@ -196,15 +196,15 @@ def get_new_assignments(result_monitor, input_numbers):
 #------------------------------------------------------------------------------
 # load MNIST
 #------------------------------------------------------------------------------
-#start = time.time()
-#training = get_labeled_data(MNIST_data_path + 'training')
-#end = time.time()
-#print ('time needed to load training set:', end - start)
+start = time.time()
+training = get_labeled_data(MNIST_data_path + 'training')
+end = time.time()
+print ('time needed to load training set:', end - start)
 
-#start = time.time()
-#testing = get_labeled_data(MNIST_data_path + 'testing', bTrain = False)
-#end = time.time()
-#print ('time needed to load test set:', end - start)
+start = time.time()
+testing = get_labeled_data(MNIST_data_path + 'testing', bTrain = False)
+end = time.time()
+print ('time needed to load test set:', end - start)
 
 
 #------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ test_mode = True
 
 np.random.seed(0)
 data_path = './'
-data_path = '/Users/Kim/Desktop/Data/'
+data_path = '/Users/Kim/Desktop/MNIST_Diehl&Cook/'
 if test_mode:
     weight_path = data_path + 'weights/'
     num_examples = 10000 * 1
