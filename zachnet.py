@@ -15,7 +15,8 @@ J : 1
 
 learning = [[0,1,1.0],[1,0,1.0],[0,0,0.0],[1,1,0.0]]
 ## Groups
-neurons = NeuronGroup(num_neurons, eqs, clock = Clock(defaultclock.dt), threshold= 'v > -45', reset='v = -60', method='euler')
+neurons = NeuronGroup(num_neurons, eqs, clock = Clock(defaultclock.dt), 
+    threshold= 'v > -45', reset='v = -60', method='euler')
 neurons.v = -60
 neurons.J = 0
 monitor_v = StateMonitor(neurons,'v',record=True)
@@ -30,13 +31,16 @@ layer3 = [6]
 #w2 = [10*(random.random()-0.5) for _ in range(4)]
 #w1 = [25,25,25,25,25,25,25,25]
 #w2 = [25,25,25,25]
-w1 = [-51.763530770485254, -54.332018777533484, 9.4673678308465, -40.17467191494095, 14.986568839875105, -10.912079937235054, -39.69347339010056, 17.146279641109103]
+w1 = [-51.763530770485254, -54.332018777533484, 9.4673678308465, -40.17467191494095, 
+      14.986568839875105, -10.912079937235054, -39.69347339010056, 17.146279641109103]
 w2 = [2.9015566147797003, 3.8654417015484075, 1.3572763689148397, 2.9648760390418367]
-syns = Synapses(neurons, neurons, clock = Clock(defaultclock.dt), model = 'weight:1', on_pre = 'J += weight')
+syns = Synapses(neurons, neurons, clock = Clock(defaultclock.dt),
+       model = 'weight:1', on_pre = 'J += weight')
 syns.connect(i=[0,0,0,0,1,1,1,1],j=[2,3,4,5,2,3,4,5])
 syns.weight = w1
 
-syns2 = Synapses(neurons, neurons, clock = Clock(defaultclock.dt), model = 'weight:1', on_pre = 'J += weight')
+syns2 = Synapses(neurons, neurons, clock = Clock(defaultclock.dt),
+        model = 'weight:1', on_pre = 'J += weight')
 syns2.connect(i=[2,3,4,5], j=[6,6,6,6])
 syns2.weight = w2
 ## Simulation
@@ -60,8 +64,10 @@ syns2.weight = w2
 # grads = [val*error for val in w2]
 # print grads
 # w2 = [v1+ v2 for v1, v2 in zip(w2,[val*grad5*alpha for val in spikes[2:6]])]
-# w1[0:4] = [v1 + v2 for v1,v2 in zip( w1[0:4],  [val*input[0]*alpha for val in grads])]
-# w1[4:8] = [v1 + v2 for v1,v2 in zip( w1[4:8],  [val*input[1]*alpha for val in grads])]
+# w1[0:4] = [v1 + v2 for v1,v2 in zip( w1[0:4],
+#           [val*input[0]*alpha for val in grads])]
+# w1[4:8] = [v1 + v2 for v1,v2 in zip( w1[4:8], 
+#           [val*input[1]*alpha for val in grads])]
 # syns.weight = w1
 # syns2.weight = w2
 # neurons.J[0] = 0
@@ -133,8 +139,10 @@ for rand in range(7):
         grad5 = error
         grads = [val*error for val in w2]
         w2 = [v1+ v2 for v1, v2 in zip(w2,[val*grad5*alpha for val in spikes[2:6]])]
-        w1[0:4] = [v1 + direction*v2 for v1,v2 in zip( w1[0:4],  [val*spikes[0]*alpha for val in grads])]
-        w1[4:8] = [v1 + direction*v2 for v1,v2 in zip( w1[4:8],  [val*spikes[1]*alpha for val in grads])]
+        w1[0:4] = [v1 + direction*v2 for v1,v2 in zip( w1[0:4],  
+            [val*spikes[0]*alpha for val in grads])]
+        w1[4:8] = [v1 + direction*v2 for v1,v2 in zip( w1[4:8],  
+            [val*spikes[1]*alpha for val in grads])]
         syns.weight = w1
         syns2.weight = w2
     epocherr.append(temperr)
@@ -188,8 +196,10 @@ for par in [[0,1,1.0],[1,0,1.0],[0,0,0.0],[1,1,0.0]]:
     #grad5 = error
     #grads = [val*error for val in w2]
     #w2 = [v1+ v2 for v1, v2 in zip(w2,[val*grad5*alpha for val in spikes[2:6]])]
-    #w1[0:4] = [v1 + v2 for v1,v2 in zip( w1[0:4],  [val*input[0]*alpha for val in grads])]
-    #w1[4:8] = [v1 + v2 for v1,v2 in zip( w1[4:8],  [val*input[1]*alpha for val in grads])]
+    #w1[0:4] = [v1 + v2 for v1,v2 in zip( w1[0:4],  
+    #          [val*input[0]*alpha for val in grads])]
+    #w1[4:8] = [v1 + v2 for v1,v2 in zip( w1[4:8],  
+    #          [val*input[1]*alpha for val in grads])]
     #syns.weight = w1
     #syns2.weight = w2
 print("ERROR")
